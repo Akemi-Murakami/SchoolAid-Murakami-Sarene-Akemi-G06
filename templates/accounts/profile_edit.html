@@ -1,0 +1,17 @@
+{% extends "app_base.html" %}
+{% block title %}Edit profile{% endblock %}
+{% block app_content %}
+<h1>Edit profile</h1>
+<p class="lead">Your role can only be changed by a school administrator.</p>
+<form class="form-narrow" method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  {% include "partials/_field.html" with field=form.full_name %}
+  {% include "partials/_field.html" with field=form.email %}
+  {% include "partials/_field.html" with field=form.contact_number %}
+  {% include "partials/_field.html" with field=form.profile_photo %}
+  <p class="actions">
+    <button class="btn btn-primary" type="submit">Save changes</button>
+    <a class="btn btn-quiet" href="{% url 'profile' %}">Cancel</a>
+  </p>
+</form>
+{% endblock %}

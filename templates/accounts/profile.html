@@ -1,0 +1,19 @@
+{% extends "app_base.html" %}
+{% block title %}My profile{% endblock %}
+{% block app_content %}
+<h1>My profile</h1>
+<section class="block profile">
+  {% if user.profile_photo %}<img class="profile-photo" src="{{ user.profile_photo.url }}" alt="Your profile photo">{% else %}<span class="profile-photo placeholder">{{ user.full_name|slice:":1"|upper }}</span>{% endif %}
+  <dl class="details">
+    <dt>Full name</dt><dd>{{ user.full_name }}</dd>
+    <dt>Email</dt><dd>{{ user.email }}</dd>
+    <dt>Contact number</dt><dd>{{ user.contact_number|default:"Not added yet" }}</dd>
+    <dt>Role</dt><dd>{{ user.role.role_name }}</dd>
+    <dt>Member since</dt><dd>{{ user.created_at|date:"F j, Y" }}</dd>
+  </dl>
+</section>
+<p class="actions">
+  <a class="btn btn-primary" href="{% url 'profile_edit' %}">Edit profile</a>
+  <a class="btn btn-quiet" href="{% url 'password_change' %}">Change password</a>
+</p>
+{% endblock %}
