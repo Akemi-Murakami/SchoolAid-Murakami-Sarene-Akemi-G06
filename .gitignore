@@ -1,0 +1,16 @@
+# Secrets and local config
+.env
+
+# Environments and caches
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Local files
+media/
+staticfiles/
+db.sqlite3
+.idea/
+.vscode/
+.DS_Store
