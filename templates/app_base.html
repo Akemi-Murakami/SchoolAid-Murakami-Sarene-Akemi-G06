@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="shell">
+  <aside class="sidebar">
+    <a class="wordmark" href="{% url 'dashboard' %}">SchoolAid</a>
+    <nav aria-label="Main">
+      <ul>
+        {% for item in nav_items %}
+        <li>
+          {% if item.url %}
+          <a href="{{ item.url }}"{% if item.active %} aria-current="page"{% endif %}>{{ item.label }}</a>
+          {% else %}
+          <span class="nav-soon">{{ item.label }}<small>Coming soon</small></span>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% if user.is_staff %}<a class="nav-extra" href="{% url 'admin:index' %}">Manage accounts and roles</a>{% endif %}
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <a class="me" href="{% url 'profile' %}">
+        {% if user.profile_photo %}<img class="avatar" src="{{ user.profile_photo.url }}" alt="">{% else %}<span class="avatar">{{ user.full_name|slice:":1"|upper }}</span>{% endif %}
+        <span>{{ user.full_name }}<small>{{ user.role.role_name }}</small></span>
+      </a>
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="btn btn-quiet" type="submit">Log out</button></form>
+    </header>
+    <main class="content">
+      {% include "partials/_messages.html" %}
+      {% block app_content %}{% endblock %}
+    </main>
+  </div>
+</div>
+{% endblock %}

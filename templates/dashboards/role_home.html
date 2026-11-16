@@ -1,0 +1,18 @@
+{% extends "app_base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block app_content %}
+<h1>{{ page_title }}</h1>
+<p class="lead">{{ intro }}</p>
+
+<section class="block">
+  <h2>Notifications</h2>
+  <p class="empty">Nothing new right now.</p>
+</section>
+
+<section class="block">
+  <h2>Coming in later phases</h2>
+  <ul class="plain">
+    {% for item in upcoming %}<li>{{ item }}</li>{% endfor %}
+  </ul>
+</section>
+{% endblock %}

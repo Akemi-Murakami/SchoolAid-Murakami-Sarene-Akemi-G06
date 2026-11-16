@@ -1,0 +1,37 @@
+{% extends "app_base.html" %}
+{% block title %}Administrator dashboard{% endblock %}
+{% block app_content %}
+<h1>Administrator dashboard</h1>
+<p class="lead">See who has joined SchoolAid. Report review and announcements arrive in the next phase.</p>
+
+<section class="block">
+  <h2>Active emergencies</h2>
+  <p class="empty">No emergencies to show. Reports will appear here once emergency reporting is built.</p>
+</section>
+
+<section class="block">
+  <h2>Accounts by role</h2>
+  <table class="table">
+    <thead><tr><th scope="col">Role</th><th scope="col" class="num">Accounts</th></tr></thead>
+    <tbody>
+      {% for role in roles %}<tr><td>{{ role.role_name }}</td><td class="num">{{ role.account_count }}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="block">
+  <h2>Newest accounts</h2>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Role</th><th scope="col">Joined</th></tr></thead>
+      <tbody>
+        {% for account in recent_users %}
+        <tr><td>{{ account.full_name }}</td><td>{{ account.email }}</td><td>{{ account.role.role_name }}</td><td>{{ account.created_at|date:"M j, Y" }}</td></tr>
+        {% empty %}
+        <tr><td colspan="4">No accounts yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
