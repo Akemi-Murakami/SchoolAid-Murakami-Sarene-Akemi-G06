@@ -1,0 +1,17 @@
+{% extends "auth_base.html" %}
+{% block title %}Create account{% endblock %}
+{% block auth_content %}
+<h1>Create your account</h1>
+<p class="lead">Pick the role that matches your place in the school.</p>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% include "partials/_field.html" with field=form.full_name %}
+  {% include "partials/_field.html" with field=form.email %}
+  {% include "partials/_field.html" with field=form.contact_number %}
+  {% include "partials/_field.html" with field=form.role %}
+  {% include "partials/_field.html" with field=form.password1 %}
+  {% include "partials/_field.html" with field=form.password2 %}
+  <button class="btn btn-primary btn-block" type="submit">Create account</button>
+</form>
+<p class="alt">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+{% endblock %}

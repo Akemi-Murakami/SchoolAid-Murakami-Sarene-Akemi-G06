@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="auth">
+  <section class="auth-brand">
+    <a class="wordmark" href="{% url 'home' %}">SchoolAid</a>
+    <div class="tap" aria-hidden="true"><span></span></div>
+    <p class="tagline">One tap.<br>Faster help.</p>
+    <p class="brand-note">Report school emergencies and keep staff and families informed from one place.</p>
+  </section>
+  <main class="auth-form">
+    <div class="auth-form-inner">
+      {% include "partials/_messages.html" %}
+      {% block auth_content %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% endblock %}
