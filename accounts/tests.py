@@ -52,6 +52,14 @@ class RegistrationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(User.objects.exists())
 
+    def test_student_can_register(self):
+        student_role = Role.objects.get(role_name=Role.STUDENT)
+        response = self.client.post(reverse("register"), self.data(role=student_role.pk))
+        self.assertRedirects(response, reverse("login"))
+        student = User.objects.get(email="ana@school.test")
+        self.assertEqual(student.role.role_name, Role.STUDENT)
+        self.assertTrue(student.check_password(PASSWORD))
+
     def test_cannot_self_register_as_administrator(self):
         admin_role = Role.objects.get(role_name=Role.ADMIN)
         response = self.client.post(reverse("register"), self.data(role=admin_role.pk))
@@ -85,6 +93,7 @@ class DashboardAccessTests(TestCase):
     def test_each_role_lands_on_its_own_dashboard(self):
         expected = {
             Role.ADMIN: "admin_dashboard",
+            Role.STUDENT: "student_dashboard",
             Role.TEACHER: "teacher_dashboard",
             Role.NURSE: "nurse_dashboard",
             Role.SECURITY: "security_dashboard",
@@ -94,6 +103,11 @@ class DashboardAccessTests(TestCase):
             self.client.force_login(make_user(email=f"{url_name}@school.test", role=role))
             response = self.client.get(reverse("dashboard"))
             self.assertRedirects(response, reverse(url_name))
+
+    def test_student_cannot_open_teacher_dashboard(self):
+        self.client.force_login(make_user(email="student@school.test", role=Role.STUDENT))
+        response = self.client.get(reverse("teacher_dashboard"))
+        self.assertRedirects(response, reverse("dashboard"), fetch_redirect_response=False)
 
     def test_user_cannot_open_another_roles_dashboard(self):
         self.client.force_login(make_user(role=Role.TEACHER))

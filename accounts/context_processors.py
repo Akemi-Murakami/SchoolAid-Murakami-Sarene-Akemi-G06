@@ -1,3 +1,4 @@
+from django.urls import reverse
 
 from .models import Role
 
@@ -15,6 +16,7 @@ NAV = {
         ("Emergency contacts", None),
         ("My profile", "profile"),
     ],
+    Role.STUDENT: [("Dashboard", "dashboard"), ("Report an emergency", None), ("My reports", None)] + SHARED_END,
     Role.TEACHER: [("Dashboard", "dashboard"), ("Report an emergency", None), ("My reports", None)] + SHARED_END,
     Role.NURSE: [("Dashboard", "dashboard"), ("Medical reports", None), ("Notifications", None)] + SHARED_END,
     Role.SECURITY: [("Dashboard", "dashboard"), ("Security reports", None), ("Notifications", None)] + SHARED_END,

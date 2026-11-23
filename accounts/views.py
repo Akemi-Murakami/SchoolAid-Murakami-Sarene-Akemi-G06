@@ -11,8 +11,6 @@ from .forms import LoginForm, ProfileForm, RegistrationForm
 from .models import Role, User
 
 
-# ---------- Registration, login, logout ----------
-
 def register(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
@@ -45,8 +43,6 @@ class SchoolAidLogoutView(LogoutView):
         return response
 
 
-# ---------- Role-based dashboards ----------
-
 @login_required
 def dashboard(request):
     """Send each user to the dashboard for their role."""
@@ -63,6 +59,16 @@ def admin_dashboard(request):
 def _role_home(request, title, intro, upcoming):
     context = {"page_title": title, "intro": intro, "upcoming": upcoming}
     return render(request, "dashboards/role_home.html", context)
+
+
+@role_required(Role.STUDENT)
+def student_dashboard(request):
+    return _role_home(
+        request,
+        "Student dashboard",
+        "Report an emergency and follow updates on the emergencies you reported.",
+        ["Send a one-tap emergency alert", "Choose the emergency type and school location", "Track the status of your reports", "View school safety information"],
+    )
 
 
 @role_required(Role.TEACHER)
@@ -105,7 +111,6 @@ def parent_dashboard(request):
     )
 
 
-# ---------- Profile (always the logged-in user's own) ----------
 
 @login_required
 def profile(request):
@@ -114,7 +119,7 @@ def profile(request):
 
 @login_required
 def profile_edit(request):
-    # Use a fresh copy so a failed save can't change the name shown in the sidebar.
+
     account = User.objects.get(pk=request.user.pk)
     form = ProfileForm(request.POST or None, request.FILES or None, instance=account)
     if request.method == "POST":

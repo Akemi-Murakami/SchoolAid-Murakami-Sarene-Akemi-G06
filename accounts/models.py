@@ -8,11 +8,12 @@ class Role(models.Model):
     """ROLES table from the SDD: one role can be assigned to many users."""
 
     ADMIN = "Administrator"
+    STUDENT = "Student"
     TEACHER = "Teacher"
     NURSE = "School Nurse"
     SECURITY = "Security Personnel"
     PARENT = "Parent/Guardian"
-    ALL = [ADMIN, TEACHER, NURSE, SECURITY, PARENT]
+    ALL = [ADMIN, STUDENT, TEACHER, NURSE, SECURITY, PARENT]
 
     role_id = models.AutoField(primary_key=True)
     role_name = models.CharField(max_length=50, unique=True)
@@ -21,9 +22,9 @@ class Role(models.Model):
         return self.role_name
 
 
-# Which dashboard (URL name) each role lands on.
 ROLE_DASHBOARDS = {
     Role.ADMIN: "admin_dashboard",
+    Role.STUDENT: "student_dashboard",
     Role.TEACHER: "teacher_dashboard",
     Role.NURSE: "nurse_dashboard",
     Role.SECURITY: "security_dashboard",
@@ -39,7 +40,7 @@ class UserManager(BaseUserManager):
             raise ValueError("An email address is required.")
         email = self.normalize_email(email).lower()
         user = self.model(email=email, **extra_fields)
-        user.set_password(password)  # always hashed, never stored as plain text
+        user.set_password(password)  
         user.save(using=self._db)
         return user
 
@@ -77,8 +78,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     contact_number = models.CharField(max_length=20, blank=True, validators=[phone_validator])
     profile_photo = models.ImageField(upload_to="profile_photos/", blank=True, null=True)
-    is_active = models.BooleanField(default=True)  # account_status: active / inactive
-    is_staff = models.BooleanField(default=False)  # can open the Django admin site
+    is_active = models.BooleanField(default=True)  
+    is_staff = models.BooleanField(default=False)  
     created_at = models.DateTimeField(auto_now_add=True)
 
     objects = UserManager()
